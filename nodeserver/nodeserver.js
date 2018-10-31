@@ -1,5 +1,5 @@
 var express = require('express');
-var proxyPath = "http://linux.fushoukeji.com/donghuan_api";//目标后端服务地址测试分支
+var proxyPath = "http://113.204.96.35:3351";//目标后端服务地址测试分支
 // var proxyPath = "http://192.168.0.187:8080/donghuanapi"; //目标后端服务地址
 var multipart = require('connect-multiparty');
 var SecurityUtil =require("./SecurityUtil")
@@ -20,7 +20,7 @@ var storage = multer.diskStorage({
 })
 var upload = multer({storage: storage})
 var app = express();
-// var multipartMiddleware = multipart();
+var multipartMiddleware = multipart();
 const PORT=3002;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -79,19 +79,23 @@ app.post('/imageUpload', upload.single('file'), function (req, res) {
         };
     });
 })
-app.use("/app",function(req,res,next){
+app.use("/pcWaste",multipartMiddleware,function(req,res,next){
 var requestURL  = proxyPath+req.originalUrl;
 
-        var params = SecurityUtil(req)
+        // var params = SecurityUtil(req)
+        // console.info(req)
         var headers = req.headers;
-        headers["content-type"]="application/x-www-form-urlencoded" ;
-        headers["access_token"]="06332fff92be4fae9765923877a86f91" ;
-        delete headers["content-length"];
+        // headers["'Content-Type"]="multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW";
+        // headers["cache-control"]="no-cache" ;
+        // delete headers["content-length"];
         var options = { 
             method: req.method,
             url: requestURL,
-            headers:headers,
-            form:params
+            headers:{
+                "x-htwl-waste":headers["x-htwl-waste"]||"",
+                "x-htwl-waste-token":headers["x-htwl-waste-token"]||"",
+            },
+            formData:req.body
         };
         request(options, function (error, response, body) {
             if (error) {

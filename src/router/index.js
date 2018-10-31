@@ -3,8 +3,8 @@ import VueRouter from 'vue-router';
 import login from '@/components/login/login.vue';//登录界面
 import main from '@/components/main/main.vue';//后台主要框架
 import mainIndex from '@/components/main/index/index.vue';//内容管理
+import mainIndexhistory from '@/components/main/index/system/personnel/personnel.vue';//历史告警
 import mainuserManagement from '@/components/main/userManagement/userManagement.vue';//用户管理
-import HelloWorld2 from '@/components/HelloWorld2.vue';
 
 Vue.use(VueRouter);
 
@@ -21,7 +21,14 @@ export default new VueRouter({
                 children:[
                     {
                         path:"mainIndex",
-                        component:mainIndex
+                        component:mainIndex,
+                        redirect: '/main/mainIndex/systemPersonnel',
+                        children:[
+                            {
+                                path:"systemPersonnel",
+                                component:mainIndexhistory
+                            }
+                        ]
                     },
                     {
                         path:"mainuserManagement",

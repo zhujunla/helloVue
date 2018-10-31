@@ -2,17 +2,17 @@
     <div>
         <div>
             <Menu mode="horizontal" :theme="theme1" active-name="1">
-                <div class="fl">
+                <div class="fl" style="color:white">
                     logo
                 </div>
                 <div class="fr">
                 <MenuItem name="1">
-                    <router-link tag="li" to="/main/mainIndex">
+                    <!-- <router-link tag="li" to="/main/mainIndex"> -->
                     <Icon type="ios-paper" />
-                    内容管理
-                    </router-link>
+                        张建坡
+                    <!-- </router-link> -->
                 </MenuItem>
-                <MenuItem name="2">
+                <!-- <MenuItem name="2">
                     <router-link tag="li" to="/main/mainuserManagement">
                         <Icon type="ios-people" />
                         用户管理
@@ -36,7 +36,7 @@
                 <MenuItem name="4">
                     <Icon type="ios-construct" />
                     综合设置
-                </MenuItem>
+                </MenuItem> -->
                 </div>
                 
             </Menu>

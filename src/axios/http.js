@@ -3,14 +3,15 @@ import axios from 'axios';
 let http = axios.create({
 //   baseURL: 'http://linux.fushoukeji.com/donghuan_api',
   withCredentials: true,
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-  },
+  headers: {    
+    'x-htwl-waste':sessionStorage.getItem("userMsg")||"",
+    'x-htwl-waste-token':sessionStorage.getItem("token")||""
+    },
   transformRequest: [function (data) {
-    let newData = '';
+    let newData = new FormData();;
     for (let k in data) {
       if (data.hasOwnProperty(k) === true) {
-        newData += encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) + '&';
+        newData.append(k,data[k]);
       }
     }
     return newData;
@@ -24,7 +25,11 @@ function apiAxios(method, url, params, response) {
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
   }).then(function (res) {
-    response(res);
+    if(res.status===200){
+      var _data = res.data;
+      response(_data);
+    }
+    
   }).catch(function (err) {
     response(err);
   })
