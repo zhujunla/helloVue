@@ -28,7 +28,7 @@ app.use(function(req,res,next){
   next();
 });
 // app.use(upload.single('file'));
-app.use(express.static("../public"));
+app.use(express.static("../"));
 app.use(localTest)
 
 app.post('/imageUpload', upload.single('file'), function (req, res) {
