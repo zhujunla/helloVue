@@ -8,7 +8,7 @@
         </div>	
         <div class="mt10 mb10">
             <Button type="primary">查询</Button>
-            <Button type="primary" @click="addAndChangeShow=true" class="ml10">新增人员</Button>
+            <Button type="primary" @click="addPeoseronal" class="ml10">新增人员</Button>
         </div>	
         <div class="redText mb10">
             *注 意 : 新增人员后，需要将新增人员加入到企业的角色才能登陆。重置密码后，默认密码为：a123456
@@ -21,56 +21,19 @@
             :loading="clickSureIfClose"
             @on-ok="zjl_submit"
             @on-cancel="zjl_cancel " -->
-        <Modal
-            v-model="addAndChangeShow"
-            :title="addAndChange?'新增':'修改'"
-            >
-            <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
-                <FormItem label="Password" prop="passwd">
-                    <Input type="password" v-model="formCustom.passwd"></Input>
-                </FormItem>
-                <FormItem label="Confirm" prop="passwdCheck">
-                    <Input type="password" v-model="formCustom.passwdCheck"></Input>
-                </FormItem>
-                <FormItem label="Age" prop="age">
-                    <Input type="text" v-model="formCustom.age" number></Input>
-                </FormItem>
-                
-                
-            </Form>
-            <div slot="footer">
-                 <!-- <FormItem> -->
-                    <Button type="primary" @click="zjl_submit('formCustom')">确定</Button>
-                    <Button @click="zjl_cancel('formCustom')" style="margin-left: 8px">取消</Button>
-                <!-- </FormItem> -->
-                </div>
-        </Modal>
+        <AddOrUpdate ref="addAndChangeShow" :changeList="()=>{Pagination(paginationObj)}"/>
     </div>
 </template>
 
 <script>
+import AddOrUpdate from './addOrUpdate.vue'
 export default {
+        components:{
+            AddOrUpdate
+        },
         data () {
-            return {
-                addAndChangeShow:false,
-                clickSureIfClose:true,//点击确定按钮是否关闭弹框
-                addAndChange:true,//默认新增
-                formCustom: {
-                    passwd: '',
-                    passwdCheck: '',
-                    age: ''
-                },
-                ruleCustom: {
-                    passwd: [
-                        { required: true, message: 'The name cannot be empty', trigger: 'blur' }
-                    ],
-                    passwdCheck: [
-                        { required: true, message: 'The name cannot be empty', trigger: 'blur' }
-                    ],
-                    age: [
-                        { required: true, message: 'The name cannot be empty', trigger: 'blur' }
-                    ]
-                },
+            return {   
+                addAndChangeShow:false,             
                 columns1: [
                     {
                         title:"序号",
@@ -103,21 +66,7 @@ export default {
                         width: 250,
                         render:(h, params)=>{
                             var statusnam = params.row.status==0?"禁用":"启用"
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '详情'),
+                            return h('div', [                                
                                 h('Poptip',{
                                     props: {
                                         confirm	:true,
@@ -174,7 +123,7 @@ export default {
                                     style: {
                                         marginRight: '5px'
                                     }                                    
-                                },重置密码)]),
+                                },"重置密码")]),
                                 h('Button', {
                                     props: {
                                         type: 'primary',
@@ -182,7 +131,12 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            var value = params.row;
+                                            const {addAndChangeShow} = this.$refs;
+                                            addAndChangeShow.addAndChangeShow = true;
+                                            addAndChangeShow.addAndChange = false;
+                                            // this.$refs.addAndChangeShow.objectId = value.objectid;
+                                            addAndChangeShow.queryUserById_ajax({objectId:value.objectid})
                                         }
                                     }
                                 }, '编辑')
@@ -203,29 +157,16 @@ export default {
         beforeMount(){
             this.Pagination(this.paginationObj);
         },
-        methods:{
+        methods:{ 
+            addPeoseronal(){
+                this.$refs.addAndChangeShow.addAndChangeShow = true;
+                this.$refs.addAndChangeShow.addAndChange = true;
+            },           
             pagePlation(pageNumber){
                 console.info(pageNumber);
                 this.$set(this.paginationObj,"pageNumber",pageNumber);
                 this.Pagination(this.paginationObj);
-            },
-            zjl_submit(){//提交确定
-                console.info("确定");
-                
-                this.$refs["formCustom"].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('Success!');
-                    } else {
-                        this.clickSureIfClose = false;
-                        // this.clickSureIfClose = true;
-                        this.$Message.error('Fail!');
-                        
-                    }
-                })
-            },
-            zjl_cancel(){//提交取消
-                console.info("取消")
-            },
+            },           
             resetPassword_ajax(obj){
                 const _this = this;
                 this.$zjl_http.post('/pcWaste/v01/htwl/waste/userManage/resetPassword',obj,(res)=>{
@@ -237,7 +178,7 @@ export default {
                             content:message                            
                         });
                     } else{
-                        _this.$Message.error(message);
+                        
                         
                     }
                 })
@@ -256,7 +197,7 @@ export default {
                         }
                         });
                     } else{
-                        _this.$Message.error(message);
+                        
                         
                     }
                 })
@@ -278,7 +219,7 @@ export default {
                         _this.data2 = [];
                         // });
                     }else{
-                        _this.$Message.error(message);
+                        
                         
                     }
                 })              

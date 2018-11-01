@@ -7,7 +7,10 @@ import mainIndexhistory from '@/components/main/index/system/personnel/personnel
 import mainuserManagement from '@/components/main/userManagement/userManagement.vue';//用户管理
 
 Vue.use(VueRouter);
-
+var userMsg = window.sessionStorage.getItem("userMsg");
+if(!userMsg){
+    window.location.hash = "/login";
+}
 export default new VueRouter({
   routes: [
             {
@@ -27,12 +30,12 @@ export default new VueRouter({
                             {
                                 path:"systemPersonnel",
                                 component:mainIndexhistory
+                            },
+                            {
+                                path:"mainuserManagement",
+                                component:mainuserManagement
                             }
                         ]
-                    },
-                    {
-                        path:"mainuserManagement",
-                        component:mainuserManagement
                     }
                 ]
             },

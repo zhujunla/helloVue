@@ -1,24 +1,26 @@
 import axios from 'axios';
+import Vue from 'vue';
 
-let http = axios.create({
-//   baseURL: 'http://linux.fushoukeji.com/donghuan_api',
-  withCredentials: true,
-  headers: {    
-    'x-htwl-waste':sessionStorage.getItem("userMsg")||"",
-    'x-htwl-waste-token':sessionStorage.getItem("token")||""
-    },
-  transformRequest: [function (data) {
-    let newData = new FormData();;
-    for (let k in data) {
-      if (data.hasOwnProperty(k) === true) {
-        newData.append(k,data[k]);
-      }
-    }
-    return newData;
-  }]
-});
-
+const vue = new Vue();
+console.info(new Vue)
 function apiAxios(method, url, params, response) {
+  let http = axios.create({
+    //   baseURL: 'http://linux.fushoukeji.com/donghuan_api',
+    withCredentials: true,
+    headers: {    
+      'x-htwl-waste':sessionStorage.getItem("userMsg")||"",
+      'x-htwl-waste-token':sessionStorage.getItem("token")||""
+      },
+    transformRequest: [function (data) {
+      let newData = new FormData();;
+      for (let k in data) {
+        if (data.hasOwnProperty(k) === true) {
+          newData.append(k,data[k]);
+        }
+      }
+      return newData;
+    }]
+  });
   http({
     method: method,
     url: url,
@@ -27,7 +29,16 @@ function apiAxios(method, url, params, response) {
   }).then(function (res) {
     if(res.status===200){
       var _data = res.data;
+      // var rs_data = _data.data;
+      var code = _data.code;
+      var message = _data.message;
       response(_data);
+      if(code !== 1000){
+        vue.$Message.error(message);
+        if(code === 1003){
+          window.location.hash = "/login"
+        }
+      }
     }
     
   }).catch(function (err) {
