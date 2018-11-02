@@ -18,17 +18,17 @@
                 <div class="from_title">
                     固体废物管理信息系统
                 </div>
-                <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80" >
-                    <FormItem label="用户名" prop="username">
-                        <Input type="text" @on-enter="handleSubmit" v-model="formInline.username" placeholder="用户名">                           
+                <Form ref="formInline"  :model="formInline" :rules="ruleInline" :label-width="80" >
+                    <FormItem label="用户名：" prop="username">
+                        <Input type="text" @on-enter="handleSubmit" class="zjl_input" v-model="formInline.username" placeholder="用户名">                           
                         </Input>
                     </FormItem>
-                    <FormItem label="密码" prop="pwd">
-                        <Input type="password" @on-enter="handleSubmit" v-model="formInline.pwd" placeholder="密码">                            
+                    <FormItem label="密码：" prop="pwd">
+                        <Input type="password" @on-enter="handleSubmit" class="zjl_input" v-model="formInline.pwd" placeholder="密码">                            
                         </Input>
                     </FormItem>
-                    <FormItem label="验证码" prop="registrationCode">
-                        <Input type="text" @on-enter="handleSubmit" v-model="formInline.registrationCode" style="width:120px" placeholder="验证码">                            
+                    <FormItem label="验证码：" prop="registrationCode">
+                        <Input type="text" @on-enter="handleSubmit" class="zjl_input" v-model="formInline.registrationCode" style="width:120px" placeholder="验证码">                            
                         </Input>
                         <img class="fr h35" v-bind:src="imgUrls+imgCodes" v-on:click="imgCode" alt="点击获取验证码"/>
                     </FormItem>
@@ -497,6 +497,15 @@ export default {
                     text-align: center;
                     margin-bottom: 50px;
                     margin-top: 70px;
+                }
+                .zjl_input{
+                    input{
+                        background-color: transparent;
+                        border-radius: 0px;
+                        border: 1px solid transparent;
+                        border-bottom: 1px solid #515a6e;
+                    }
+                    
                 }
             }
         }
