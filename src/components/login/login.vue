@@ -20,15 +20,15 @@
                 </div>
                 <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="80" >
                     <FormItem label="用户名" prop="username">
-                        <Input type="text" v-model="formInline.username" placeholder="用户名">                           
+                        <Input type="text" @on-enter="handleSubmit" v-model="formInline.username" placeholder="用户名">                           
                         </Input>
                     </FormItem>
                     <FormItem label="密码" prop="pwd">
-                        <Input type="password" v-model="formInline.pwd" placeholder="密码">                            
+                        <Input type="password" @on-enter="handleSubmit" v-model="formInline.pwd" placeholder="密码">                            
                         </Input>
                     </FormItem>
                     <FormItem label="验证码" prop="registrationCode">
-                        <Input type="text" v-model="formInline.registrationCode" style="width:120px" placeholder="验证码">                            
+                        <Input type="text" @on-enter="handleSubmit" v-model="formInline.registrationCode" style="width:120px" placeholder="验证码">                            
                         </Input>
                         <img class="fr h35" v-bind:src="imgUrls+imgCodes" v-on:click="imgCode" alt="点击获取验证码"/>
                     </FormItem>
@@ -36,7 +36,7 @@
                         
                     </div> -->
                     <FormItem>
-                        <Button class="w" type="primary" @click="handleSubmit('formInline')">登录</Button>
+                        <Button :disabled="isremoteLogin" class="w" type="primary" @click="handleSubmit">登录</Button>
                     </FormItem>
                 </Form>
             </div>
@@ -65,6 +65,7 @@ export default {
                 imgUrls:imgBaseUrl+"/pcWaste/v01/htwl/waste/base/getVerificationCode?timeStr=checkCode",//图片路劲
                 imgCodes:new Date().getTime(),//图片时间搓
                 publicKey:"",
+                isremoteLogin:false,
                 userObj_pass:{},//加密东西
                 formInline: {                    
                     username: '',
@@ -384,9 +385,9 @@ export default {
                 myChart.setOption(option);
             }, 2000);
             },
-            handleSubmit(name) {
+            handleSubmit() {
                 var _this = this;
-                this.$refs[name].validate((valid) => {
+                this.$refs['formInline'].validate((valid) => {
                     if (valid) {
                         // console.info(valid)
                         var formInline = this.formInline;
@@ -405,7 +406,7 @@ export default {
                         }
                         _this.getLogin(obj);
                     } else {
-                        this.$Message.error('Fail!');
+                        this.$Message.error('请输入必填内容');
                     }
                 })
             },
@@ -427,14 +428,16 @@ export default {
                         window.sessionStorage.setItem("publicToken",data.token);                        
                         encryptor.setPublicKey(data.pubk)
                     }else{
-                        _this.$Message.error(message);
+                        // _this.$Message.error(message);
                     }                    
                 })
             },
             getLogin(obj){
                 var that = this;
+                this.isremoteLogin=true;
                 this.$zjl_http.post('/pcWaste/v01/htwl/waste/base/login',obj,(res)=>{
-                    console.info(res);                    
+                    // console.info(res);  
+                    this.isremoteLogin=false;                  
                     var datas = res.data;
                     var code = res.code;
                     var msg = res.message;
@@ -450,7 +453,8 @@ export default {
                         window.sessionStorage.setItem("userData",JSON.stringify(datas));
                         // window.sessionStorage.setItem("publicKey",data.pubk);
                     }else{
-                        that.$Message.error(msg)
+                        that.imgCode();
+                        // that.$Message.error(msg)
                     }
                     
                 })
