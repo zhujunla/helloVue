@@ -168,15 +168,25 @@ export default {
                         },
                         detail: {
                             backgroundColor: 'rgba(30,144,255,0.8)',
-                            borderWidth: 1,
-                            borderColor: '#fff',
-                            shadowColor: '#fff', //默认透明
+                            fontWeight: 'bolder',
+                            borderRadius: 3,
+                            // backgroundColor: '#444',
+                            borderColor: '#aaa',
                             shadowBlur: 5,
-                            offsetCenter: [0, '50%'],       // x, y，单位px
-                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                                fontWeight: 'bolder',
-                                color: '#fff'
-                            }
+                            shadowColor: '#333',
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 3,
+                            borderWidth: 2,
+                            textBorderColor: '#000',
+                            textBorderWidth: 2,
+                            textShadowBlur: 2,
+                            textShadowColor: '#fff',
+                            textShadowOffsetX: 0,
+                            textShadowOffsetY: 0,
+                            fontFamily: 'Arial',
+                            width: 80,
+                            color: '#eee',
+                            rich: {}
                         },
                         data: [{ value: 40, name: '' }]
                     },
@@ -498,15 +508,15 @@ export default {
                     margin-bottom: 50px;
                     margin-top: 70px;
                 }
-                .zjl_input{
-                    input{
-                        background-color: transparent;
-                        border-radius: 0px;
-                        border: 1px solid transparent;
-                        border-bottom: 1px solid #515a6e;
-                    }
+                // .zjl_input{
+                //     input{
+                //         background-color: transparent;
+                //         border-radius: 0px;
+                //         border: 1px solid transparent;
+                //         border-bottom: 1px solid #515a6e;
+                //     }
                     
-                }
+                // }
             }
         }
     }
